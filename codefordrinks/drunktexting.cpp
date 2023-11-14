@@ -28,7 +28,7 @@ void print_vars(T arg, Args... args) {
     print_vars(args...);
 }
 //go for outline with ;, then details
-//en dp som kollar vilka av a-j är aktiva och uppdaterar detta optimalt. 
+//en dp som kollar hur många chars man kan matcha från varje position i string b och framåt
 
 int const mxn = 1005;
 string a, b, ans;
