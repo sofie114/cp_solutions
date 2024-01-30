@@ -93,25 +93,6 @@ pii findodd(int at, int parent, int col){ //return if odd in subtree and if in o
     return {0, 0};
 }
 
-void dfs(int at, int parent, int rootcycle){
-    vis[at] = 1;
-
-    vo<pair<int, char>> toErase;
-    for(auto ok: adj[at]){
-        int x = ok.f; if(x==parent) continue;
-        
-        if(vis[x] || (iscycle[x] && x!=rootcycle && !(nx[x]==at && nx[at]==x))){
-                toErase.pb(ok);
-        }
-        else dfs(x, at, rootcycle);
-    }
-    for(auto ok: toErase){
-        // pr(ok)
-        adj[at].erase(ok);
-        adj[ok.f].erase({at, other(ok.s)});
-    }
-}
-
 bool treesolution(int at, vi &ctvis, vo<char> &ans){ //return parity
     vis[at] = 1;
 
