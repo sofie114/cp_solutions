@@ -139,7 +139,6 @@ int main(){
     }
 
     dfs(0, 0, 0);
-
     LCA tree(adj);
 
     rep(i, 1, n+1){
@@ -173,45 +172,4 @@ create a graph which finds the order of the cars using the relationship order
 4 2
 1 2
 6 1
-
-
-
-6 3
-1 2
-2 3
-3 4
-3 5
-5 6
-4 6
-5 3
-2 4
-
-
-6 3
-1 2 
-2 3
-2 4
-1 5
-5 6
-1 3
-2 4
-6 5
-
-5 2
-1 2
-1 3
-1 4
-1 5
-5 3
-4 2
-
-6 2
-1 2
-2 3
-3 4
-1 5
-5 6
-4 2
-5 6
-
 */
