@@ -46,10 +46,10 @@ void solve(int pos){
         solve(pos+2);
 
         s[pos] = char(((ini[pos]-97 + i) % 26) + 97); 
-        ans.pb(s); hsh.insert(s);
+        ans.pb(s); 
         
         s[pos+1] = s[pos]; 
-        ans.pb(s); hsh.insert(s);
+        ans.pb(s);
     }
 
 
