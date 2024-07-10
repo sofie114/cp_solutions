@@ -1,97 +1,69 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
 #define int long long
 #define vo vector
 #define pb push_back
-#define sz(x) x.size()
-#define fi first 
 #define se second
+#define fi first
+#define all(v) v.begin(), v.end()
+typedef vector<int> vi;
+typedef pair<int, int> pii;
+#define umap unordered_map
+#define uset unordered_set
  
-typedef long long ll;
-typedef pair<int ,int> pii;
-typedef vo<int> vi;
+#define rep(i, a, b) for(int i=(a); i<b; i++)
+#define pr1(x) cerr << #x << '=' << x << ' ';
+//for google contests
+#define repd(i, a, b) for(int i=(b-1); i >= a; i--)
+void _pr(signed x) {cerr << x;}
+void _pr(long long x) {cerr << x;}
+void _pr(size_t x) {cerr << x;}
+void _pr(double x) {cerr << x;}
+void _pr(char x) {cerr << '\'' << x << '\'';}
+void _pr(const char* x) {cerr << x;}
+void _pr(bool x) {cerr << (x ? "true" : "false");}
+template<typename T, typename V> void _pr(const pair<T, V> &x);
+template<typename T, typename V> void _pr(const pair<T, V> &x) {cerr << "\e[95m" << "[ "; _pr(x.first); cerr << ", "; _pr(x.second); cerr << "\e[95m" << ']';}
+template<typename T> void _pr(const T &x) {int F=0; cerr << '{'; for(auto &i: x) cerr << (F++ ? ", " : ""), _pr(i); cerr << "\e[91m" << '}';}
+template <typename T, typename... V> void _pr(T t, V... v) {_pr(t); if(sizeof...(v)) cerr << ", "; _pr(v...);}
+#define pr(x...) cerr << "\e[91m" << __func__ << ':' << __LINE__ << " [" << #x << "] = ["; _pr(x); cerr << "\e[91m" << ']' << "\033[0m"  << endl;
  
-#define rep(i, a, b) for(ll i=(a); i<(b); i++)
-#define pr(x) cerr << #x << " " << x << endl;
- 
-ll const inf = 1e9; 
-ll const mxn = 1e5+4;
-int n, m, k, anime[mxn], vis[mxn];
+//go for outline with ;, then details
+int const inf = LLONG_MAX, mxn = 1e5+__DBL_MAX_10_EXP__;
+int n, m, k, anime[mxn], from[mxn];
 vo<vi> adj(mxn);
-// vi dist(mxn, inf);
- 
-int bfs(int source){
-    queue<int> qu; qu.push(source);
-    vi dist(n, inf); dist[source] = 0;
- 
-    while(sz(qu)){
-        int v = qu.front(); qu.pop();
- 
-        for(auto x: adj[v]){
-            if(dist[x] == inf){
-                dist[x] = dist[v] + 1;
-                if(anime[x]) return dist[x];
-                qu.push(x);
-            }
-        }
- 
-    }
-    return -1;
-}
+vi dist(mxn, inf);
  
 signed main(){
     cin.tie(0)->sync_with_stdio(0);
     cin>>n>>m>>k;
-    vi dist(n, inf), par(n, -1);
-    queue<array<int, 3>> qu; // node, source animenode, dist
  
-    rep(i, 0, k){
-        int a; cin>>a;a--;
-        anime[a] = 1;
-        qu.push({a, a, 0});
-    }
-    rep(i, 0, m){
-        int a, b; cin>>a>>b; a--, b--;
-        adj[a].pb(b); adj[b].pb(a);
+    queue<array<int, 3>> qu; //dist and node coming from 
+    rep(i, 0, k) { int a; cin>>a; qu.push({0, a, a}); anime[a] = 1;}
+    rep(i, 0, m) {
+        int a, b; cin>>a>>b; adj[a].pb(b), adj[b].pb(a);
     }
  
-    while(sz(qu)){
-        array<int, 3> v = qu.front(); qu.pop();
-        int d = v[2], p = v[1];
-        // pr(v[0])
- 
-        for(auto x: adj[v[0]]){
-            if(x == p) continue;
-            // pr(x)
-            if(dist[x] == inf){
- 
-                dist[x] = d+1;
-                par[x] = p;
-                qu.push({x, p, dist[x]});
-            }
+    while(qu.size()){
+        auto [d, v, root] = qu.front(); qu.pop();
+        
+        for(auto x: adj[v]){
+            if(x == root || from[x] == root) continue;
             else if(anime[x]){
-                dist[p] = min(dist[p], d+1);
-                dist[x] = min(dist[x], d+1);
+                if(d+1 < dist[x]) {dist[x] = d+1; from[x] = root;}
+                if(d+1 < dist[root]) {dist[root] = d+1; from[root] = x;}
+            }
+            else if(dist[x] == inf){
+                dist[x] = d+1; from[x] = root;
+                qu.push({d+1, x, root});
             }
             else{
- 
-                if(par[x] != p){
-                    if(par[x] == -1) continue;
-                    // pr(par[x])
-                    // pr(p)
- 
-                    // pr(dist[p])
-                    dist[p] = min(dist[p], d+1 + dist[x]);
-                    dist[par[x]] = min(dist[par[x]], d+1+dist[x]);
-                    // pr(dist[p])
-                }
+                if(dist[x]+d+1 < dist[from[x]]) {dist[from[x]] = dist[x]+d+1; from[from[x]] = root;}
+                if(dist[x]+d+1 < dist[root]) {dist[root] = dist[x]+d+1; from[root] = from[x];}
             }
         }
     }
- 
-    rep(i, 0, n){
-        if(dist[i] == inf) cout << -1 << " ";
-        else cout << dist[i] << " ";
-    }
+    
+    rep(i, 1, n+1) if(dist[i]==inf) dist[i] = -1;
+    rep(i, 1, n+1) cout << dist[i] << " ";
 }
