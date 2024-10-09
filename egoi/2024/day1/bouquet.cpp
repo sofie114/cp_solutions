@@ -52,26 +52,33 @@ signed main(){
         cout << *max_element(all(dp));
     }
     else{
-        // full solution: binary search to find rightmost index whose right wing does not cover currindex. 
-        // then take the prefixdpmax of this ind
-        vi dp(n+1, 1), maxi(n+1, 0); 
-        rep(i, 0, n){
-            int l = max((int)0, i-lef[i]); // first forbidden index
+        // full solution: dp[i]=max tulips taking 0-i and taking i. dpval[val] = smallest index having this dpval
+        // we need to satisfy two conditions: when using dp[j] for dp[i], rig[j]<i-j and lef[i]<i-j
+        // the first one is satisfied by only updating an array when we have reached an i far away enough
+        // the second one is satisfied by checking the maximum value from position i-lef[i]
 
-            //binary search
-            int lo=-1, hi = l, mid=-1;
+        vi dp(n+1, 1), dpval(n+1, inf); dpval[0]=-1;
+        priority_queue<array<int, 3>, vo<array<int, 3>>, greater<array<int, 3>>> pq; //right end, j, dp[j]
+        rep(i, 0, n){
+            // update dpval
+            while(pq.size() && pq.top()[0]<i){
+                auto [r, u, val] = pq.top(); pq.pop();
+                dpval[val] = min(dpval[val], u);
+            }
+
+            // find biggest dpval since before to use
+            int l = max((int)0, i-lef[i]), r = min((int)n, i+rig[i]);
+            int lo = 0, hi = n+1;
             while(lo+1<hi){
-                mid = (lo+hi)/2;
-                if(mid+rig[mid] < i) lo = mid;
+                int mid = (hi+lo)/2;
+                if(dpval[mid] < l) lo = mid;
                 else hi = mid;
             }
-            //mid gives last okay index
-            if(mid!=-1) dp[i] = max(dp[i], maxi[mid]+1);
 
-            if(i==0) maxi[i] = dp[i];
-            else maxi[i] = max(dp[i], maxi[i-1]);
+            dp[i] = lo+1;
+            pq.push({r, i, dp[i]});
         }
-        cout << *max_element(all(dp));  
+        cout << *max_element(all(dp));
     }
-
+    // look up judge solution after this
 }
