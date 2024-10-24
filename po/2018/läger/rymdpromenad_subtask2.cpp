@@ -85,11 +85,12 @@ signed main(){
         //top down, dpc[i][u] = min moves to go from windows i-m when arrived at i with u rotation clockwise, dpa but for anticlockwise
             wind.insert(wind.begin(), 1);
             vo<vi> dpc(m, vi(n*m+1, inf)), dpa(m, vi(n*m+1, inf)); //clockwise and anticlockwise dp
-            cout << topdown(0, 0, dpc, dpa);
+            ans = topdown(0, 0, dpc, dpa);
 
         // bottom up
             // sol2();
     }
+    cout << ans;
 }
 
 /*
