@@ -152,17 +152,19 @@ signed main(){
 
 /*
 subtask 1: from each window, we either walk clockwise or anticlockwise. try both. time complexity: n! = 10! ok
-subtask 2: dp[i][u] = minimum moves to arrive at window i with u extra clockwise/anticlockwise steps 
-time complexity: m*(n*m) as u < n*m 
+subtask 2: 
+    top down: dpc[i][u] = min moves to visit windows i-m (starting at i) with u rotation clockwise
+    bottom up: dp[i][u] = minimum moves to arrive at window i with u extra clockwise/anticlockwise steps 
+    O(m*(n*m)) as u < n*m 
 subtask 3: realize abundant dp states:
-dp[i][u] = minimum moves to arrive at window i with u with (u*n+wind[i-1]) extra clockwise rotation
-time complexity: m*m
+    dp[i][u] = minimum moves to arrive at window i with u with (u*n+wind[i-1]) extra clockwise rotation
+    O(m*m)
 
 full solution: 
-a greedy solution. 
-insight: changing a move from clockwise to anticlockwise changes the extra clockwise rotation with -n: 
-moving from pos1 to pos2 clockwise is pos2-pos1 and anticlockwise is n-(pos2-pos1)
-changing clockwise movement includes -(pos1-pos2) and -(n-(pos2-pos1) which sums to -n
---> change in rotation is the same when we choose a window to change clockwise to anticlockwise
-we can begin with all moves being clockwise and change those which saves the most moves. 
+    a greedy solution. 
+    insight: changing a move from clockwise to anticlockwise changes the extra clockwise rotation with -n: 
+    moving from pos1 to pos2 clockwise is pos2-pos1 and anticlockwise is n-(pos2-pos1)
+    changing clockwise movement includes -(pos1-pos2) and -(n-(pos2-pos1) which sums to -n
+    --> change in rotation is the same when we choose a window to change clockwise to anticlockwise
+    we can begin with all moves being clockwise and change those which saves the most moves. 
 */
